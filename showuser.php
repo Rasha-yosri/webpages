@@ -1,3 +1,6 @@
+
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,16 +11,16 @@
    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>manage</title>
+    <title>show user</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="manageuser.php">PHP MANAGE USER OPERATION</a>
+        <a class="navbar-brand" href="#">PHP Show USER OPERATION</a>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="manageuser.php">Home</a>
+              <a class="nav-link active" aria-current="page" href="login.php">log in</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="logout.php">Logout</a>
@@ -39,8 +42,7 @@
         <th>EMAIL</th>
         <th>PASSWORD</th>
         <th>JOINING DATE</th>
-        <th>USERTYPE</th>
-        <th>ACTIONS</th>
+       
       </tr>
     </thead>
     <tbody>
@@ -59,11 +61,7 @@
         <td>$row[email]</td>
         <td>$row[password]</td>
         <td>$row[create_time]</td>
-        <td>$row[userType]</td>
-        <td>
-                  <a class='btn btn-success' href='edit.php?id=$row[id]'>Edit</a>
-                  <a class='btn btn-danger' href='delete.php?id=$row[id]'>Delete</a>
-                </td>
+        
       </tr>
       ";
         }

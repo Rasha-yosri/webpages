@@ -1,41 +1,98 @@
+<?php
+  include "connection.php";
+  $id="";
+  $name="";
+  $email="";
+  $password="";
+
+  $error="";
+  $success="";
+
+  if($_SERVER["REQUEST_METHOD"]=='GET'){
+    if(!isset($_GET['id'])){
+      header("location:manageuser.php");
+      exit;
+    }
+    $id = $_GET['id'];
+    $sql = "select * from employees where id=$id";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    while(!$row){
+      header("location: manageuser.php");
+      exit;
+    }
+    $name=$row["name"];
+    $email=$row["email"];
+    $password=$row["password"];
+
+  }
+  else{
+    $id = $_POST["id"];
+    $name=$_POST["name"];
+    $email=$_POST["email"];
+    $password=$_POST["password"];
+
+    $sql = "update employees set name='$name', email='$email', password='$password' where id='$id'";
+    $result = $conn->query($sql);
+    
+  }
+  
+?>
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>edit</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+ <title>Edit</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="font-sans min-h-screen antialiased bg-gray-900 pt-24 pb-5">
-    <div class="flex flex-col justify-center sm:w-96 sm:m-auto mx-5 mb-5 space-y-8">
-      <form action="#" method="post">
-        <div class="flex flex-col bg-white p-10 rounded-lg shadow space-y-6">
-          <h1 class="font-bold text-xl text-center">Edit User</h1>
-
-          <div class="flex flex-col space-y-1">
-            <input type="text" name="name" id="name" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Username" />
-          </div>
-
-          <div class="flex flex-col space-y-1">
-            <input type="email" name="email" id="email" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Email" />
-          </div>
-
-          <div class="flex flex-col space-y-1">
-            <input type="password" name="password" id="password" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Password" />
-          </div>
-
-          <div class="flex flex-col-reverse sm:flex-row sm:justify-between items-center">
-           
-            <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-2 rounded focus:outline-none shadow hover:bg-blue-700 transition-colors">Edit</button>
-          </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" class="fw-bold">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">PHP MANAGE USER OPERATION</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="manageuser.php">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="register.php">Add New</a>
+            </li>
+          </ul>
         </div>
-      </form>
-      <div class="flex justify-center text-gray-500 text-sm">
-        <p>&copy;2023. All right reserved.</p>
       </div>
-    </div>
-  </div> 
+    </nav>
+ <div class="col-lg-6 m-auto">
+ 
+ <form method="post">
+ 
+ <br><br><div class="card">
+ 
+ <div class="card-header bg-warning">
+ <h1 class="text-white text-center">  Update Member </h1>
+ </div><br>
+
+ <input type="hidden" name="id" value="<?php echo $id; ?>" class="form-control"> <br>
+
+ <label> NAME: </label>
+ <input type="text" name="name" value="<?php echo $name; ?>" class="form-control"> <br>
+
+ <label> EMAIL: </label>
+ <input type="text" name="email" value="<?php echo $email; ?>" class="form-control"> <br>
+
+ <label> PASSWORD: </label>
+ <input type="text" name="password" value="<?php echo $password; ?>" class="form-control"> <br>
+
+ <button class="btn btn-success" type="submit" name="submit"> Submit </button><br>
+ 
+
+ </div>
+ </form>
+ </div>
 </body>
 </html>

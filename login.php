@@ -1,30 +1,58 @@
 <?php
 
-include('connection.php');
-    if (isset($_POST['login'])) {
-        $username = $_POST['userN'];
-        $password = $_POST['pass'];
-        $userType = $_POST['usertype'];
+$errors = [];
+$email = '';
+$password = '';
+$user_type = '';
 
-         $sql = "select * from employees where name = '$username' and password = '$password'";  
-         $result = mysqli_query($conn, $sql);  
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
-       $count = mysqli_num_rows($result);  
-        
-        if($count == 1){
-          if( $userType==="admin"){ 
-          header("Location: manageuser.php");
-        }elseif($userType==="user"){
-          header("Location: showuser.php");
-        }
-        else{  
-            echo  '<script>
-                        
-                        alert("Login failed. Invalid username or password!!")
-                    </script>';
-        } 
-      }    
-    }
+include 'connection.php';
+
+if (isset($_POST['login'])) {
+   $email = htmlspecialchars($_POST['email']);
+   $password = htmlspecialchars($_POST['password']);
+   $user_type = $_POST['userType']; // قيمة الدور المختارة
+
+   $hashPassword = md5($password);
+      $query = "SELECT * FROM employees WHERE email = '$email' AND password = '$hashPassword' AND userType = '$user_type'";
+   $result = mysqli_query($conn, $query);
+
+   if (!$result) {
+      die('Error Executing query! ' . mysqli_error($conn));
+   }
+
+   if (mysqli_num_rows($result) == 1) {
+      $user = mysqli_fetch_assoc($result);
+      if ($user['userType'] == 'admin') {
+         session_start();
+         $_SESSION["id"] = $user['id'];
+         $_SESSION["name"] = $user['name'];
+         $_SESSION["email"] = $user['email'];
+         $_SESSION["password"] = $user['password'];
+         $_SESSION["userType"] = $user['userType'];
+         header("Location:manageuser.php");
+         exit;
+      }
+       elseif ($user['userType'] == 'user') {
+         session_start();
+         $_SESSION["id"] = $user['id'];
+         $_SESSION["name"] = $user['name'];
+         $_SESSION["email"] = $user['email'];
+         $_SESSION["password"] = $user['password'];
+         $_SESSION["userType"] = $user['userType'];
+
+         header("Location: oneUser.php");
+         exit;
+      }
+   } else {
+      $errors[] = 'Login failed. Please check your email, password, and user '; 
+   }
+}
+
+$conn->close();
+
+
+
+    
 ?>
 
 
@@ -59,11 +87,18 @@ include('connection.php');
           </div>
 
           <div class="flex flex-col space-y-1">
-            <input type="password" name="pass" id="pass" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Password" />
+            <input type="email" name="email" id="email" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="Email" />
           </div>
 
           <div class="flex flex-col space-y-1">
-            <input type="text" name="usertype" id="user" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="UserType" />
+            <input type="password" name="password" id="password" class="border-2 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-400 focus:shadow" placeholder="password" />
+          </div>
+
+          <div class="flex flex-col space-y-1">
+           <select name="userType" id="">
+            <option selected value="user">User</option>
+            <option  value="admin">Admin</option>
+           </select>
           </div>
  
             <button type="submit" name="login" class="bg-blue-500 text-white font-bold px-5 py-2 rounded focus:outline-none shadow hover:bg-blue-700 transition-colors">Log in</button>

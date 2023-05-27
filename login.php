@@ -10,8 +10,7 @@ include 'connection.php';
 if (isset($_POST['login'])) {
    $email = htmlspecialchars($_POST['email']);
    $password = htmlspecialchars($_POST['password']);
-   $user_type = $_POST['userType']; // قيمة الدور المختارة
-
+   $user_type = $_POST['userType'];
    $hashPassword = md5($password);
       $query = "SELECT * FROM employees WHERE email = '$email' AND password = '$hashPassword' AND userType = '$user_type'";
    $result = mysqli_query($conn, $query);
@@ -49,10 +48,6 @@ if (isset($_POST['login'])) {
 }
 
 $conn->close();
-
-
-
-    
 ?>
 
 
